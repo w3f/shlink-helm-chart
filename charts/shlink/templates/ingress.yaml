@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "shlink.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-ingress
+  labels:
+    {{- include "shlink.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.env.SHORT_DOMAIN_HOST }}
+      secretName: {{ .Values.env.SHORT_DOMAIN_HOST }}-secret
+  rules:
+    - host: {{ .Values.env.SHORT_DOMAIN_HOST }}
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: {{ $fullName }}-service
+                port:
+                  number: {{ $svcPort }}
+{{- end }}

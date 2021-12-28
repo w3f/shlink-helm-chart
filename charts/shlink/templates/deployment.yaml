@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "shlink.fullname" . }}
+  labels:
+    {{- include "shlink.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "shlink.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "shlink.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "shlink.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SHORT_DOMAIN_HOST
+              value: {{required "Short Domain Host required" .Values.env.SHORT_DOMAIN_HOST | quote }}
+            - name: SHORT_DOMAIN_SCHEMA
+              value: {{default "http" .Values.env.SHORT_DOMAIN_SCHEMA | quote }}
+            - name:  DB_DRIVER
+              value: "maria"
+            - name:  DB_HOST
+              value: {{ template "mariadb.fullname" . }}-mariadb
+            - name:  DB_USER
+              value: "shlink"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mariadb.fullname" . }}-mariadb
+                  key: mariadb-password
+            {{- if .Values.env.INVALID_SHORT_URL_REDIRECT_TO }}
+            - name: INVALID_SHORT_URL_REDIRECT_TO
+              value: {{ .Values.env.INVALID_SHORT_URL_REDIRECT_TO }}
+            {{- end }}
+            {{- if .Values.env.BASE_URL_REDIRECT_TO }}
+            - name: BASE_URL_REDIRECT_TO
+              value: {{ .Values.env.BASE_URL_REDIRECT_TO }}
+            {{- end }}
+            - name: ANONYMIZE_REMOTE_ADDR
+              value: {{ .Values.env.ANONYMIZE_REMOTE_ADDR | quote }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /rest/v2/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 60
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

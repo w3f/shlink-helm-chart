@@ -1,0 +1,96 @@
+# Default values for shlink.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: shlinkio/shlink
+  pullPolicy: IfNotPresent
+
+env:
+  SHORT_DOMAIN_HOST: shlink.io  # The custom short domain used for this shlink instance. For example doma.in.
+  INVALID_SHORT_URL_REDIRECT_TO: null  # If a URL is provided here, when a user tries to access an invalid short URL, he/she will be redirected to this value. If this env var is not provided, the user will see a generic 404 - not found page.
+  BASE_URL_REDIRECT_TO: null  # If a URL is provided here, when a user tries to access Shlink's base URL, he/she will be redirected to this value. If this env var is not provided, the user will see a generic 404 - not found page.
+  ANONYMIZE_REMOTE_ADDR: false  # Tells if IP addresses from visitors should be obfuscated before storing them in the database.
+  # DISABLE_TRACK_PARAM: The name of a query param that can be used to visit short URLs avoiding the visit to be tracked. This feature won't be available if not value is provided.
+  # DELETE_SHORT_URL_THRESHOLD: The amount of visits on short URLs which will not allow them to be deleted. Defaults to 15.
+  # VALIDATE_URLS: Boolean which tells if shlink should validate a status 20x is returned (after following redirects) when trying to shorten a URL. Defaults to false.
+  # REGULAR_404_REDIRECT_TO: If a URL is provided here, when a user tries to access a URL not matching any one supported by the router, he/she will be redirected to this value. If this env var is not provided, the user will see a generic 404 - not found page.
+  # BASE_PATH: The base path from which you plan to serve shlink, in case you don't want to serve it from the root of the domain. Defaults to ''.
+  # WEB_WORKER_NUM: The amount of concurrent http requests this shlink instance will be able to server. Defaults to 16.
+  # TASK_WORKER_NUM: The amount of concurrent background tasks this shlink instance will be able to execute. Defaults to 16.
+  # VISITS_WEBHOOKS: A comma-separated list of URLs that will receive a POST request when a short URL receives a visit.
+  # DEFAULT_SHORT_CODES_LENGTH: The length you want generated short codes to have. It defaults to 5 and has to be at least 4, so any value smaller than that will fall back to 4.
+
+mariadb:
+  ## Disable MariaDB replication
+  replication:
+    enabled: false
+
+  ## Create a database and a database user
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
+  ##
+  db:
+    name: shlink
+    user: shlink
+    ## If the password is not specified, mariadb will generates a random password
+    ##
+    # password:
+
+  service:
+    port: 3306
+
+  ## MariaDB admin password
+  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
+  ##
+  # rootUser:
+  #   password:
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

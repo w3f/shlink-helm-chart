@@ -1,0 +1,11 @@
+apiVersion: v2
+name: shlink
+description: A Helm chart for Kubernetes
+icon: https://shlink.io/favicon.svg
+dependencies:
+  - name: mariadb
+    version: "7.3.21"
+    repository: "https://charts.bitnami.com/bitnami"
+type: application
+version: 0.1.0
+appVersion: 2.10.1
