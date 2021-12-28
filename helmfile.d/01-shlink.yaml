@@ -1,0 +1,7 @@
+environments:
+  production:
+  ci:
+
+releases:
+- name: shlink
+  chart: ../charts/shlink
