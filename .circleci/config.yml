@@ -1,0 +1,56 @@
+version: 2
+
+jobs:
+  integrationTests:
+    docker:
+      - image: web3f/ci-commons:v2.4.11
+    resource_class: large
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          description: run integration tests
+          command: |
+            /scripts/integration-tests.sh
+  helmLint:
+    docker:
+      - image: web3f/ci-commons:v2.4.11
+    steps:
+      - checkout
+      - run:
+          command: |
+            helm lint ./charts/shlink
+
+  publishChart:
+    docker:
+      - image: web3f/ci-commons:v2.4.11
+    steps:
+      - checkout
+      - run:
+          command: |
+            /scripts/publish-chart.sh
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - helmLint:
+          filters:
+            tags:
+              only: /.*/
+      - integrationTests:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - helmLint
+      - publishChart:
+          context: github-bot
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+          requires:
+            - integrationTests
