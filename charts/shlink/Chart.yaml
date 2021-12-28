@@ -7,5 +7,5 @@ dependencies:
     version: "7.3.21"
     repository: "https://charts.bitnami.com/bitnami"
 type: application
-version: v0.1.0
+version: v0.1.1
 appVersion: 2.10.1
