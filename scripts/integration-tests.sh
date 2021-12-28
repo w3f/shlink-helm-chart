@@ -8,7 +8,7 @@ run_tests() {
     echo Running tests...
 
     wait_pod_ready shlink
-    wait_pod_ready mariadb
+    wait_pod_ready shlink-mariadb
 }
 
 teardown() {
