@@ -24,6 +24,8 @@ env:
   # DEFAULT_SHORT_CODES_LENGTH: The length you want generated short codes to have. It defaults to 5 and has to be at least 4, so any value smaller than that will fall back to 4.
 
 mariadb:
+  architecture: standalone
+  fullnameOverride: shlink-mariadb
   auth:
     database: shlink
     username: shlink
