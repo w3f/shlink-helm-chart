@@ -24,29 +24,13 @@ env:
   # DEFAULT_SHORT_CODES_LENGTH: The length you want generated short codes to have. It defaults to 5 and has to be at least 4, so any value smaller than that will fall back to 4.
 
 mariadb:
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
-
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
-  db:
-    name: shlink
-    user: shlink
-    ## If the password is not specified, mariadb will generates a random password
-    ##
-    # password:
-
-  service:
-    port: 3306
-
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
+  architecture: standalone
+  fullnameOverride: shlink-mariadb
+  auth:
+    database: shlink
+    username: shlink
+    password: password
+    rootPassword: root_password
 serviceAccount:
   # Specifies whether a service account should be created
   create: false

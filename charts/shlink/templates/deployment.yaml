@@ -35,13 +35,13 @@ spec:
             - name:  DB_DRIVER
               value: "maria"
             - name:  DB_HOST
-              value: {{ template "mariadb.fullname" . }}-mariadb
+              value: shlink-mariadb
             - name:  DB_USER
               value: "shlink"
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "mariadb.fullname" . }}-mariadb
+                  name: shlink-mariadb
                   key: mariadb-password
             {{- if .Values.env.INVALID_SHORT_URL_REDIRECT_TO }}
             - name: INVALID_SHORT_URL_REDIRECT_TO
