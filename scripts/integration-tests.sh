@@ -19,7 +19,7 @@ main(){
     if [ -z "$KEEP_W3F_MATRIX" ]; then
         trap teardown EXIT
     fi
-
+    helm repo add bitnami https://charts.bitnami.com/bitnami
     source /scripts/build-helmfile.sh
 
     run_tests
