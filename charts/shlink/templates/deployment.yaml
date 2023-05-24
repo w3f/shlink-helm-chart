@@ -31,7 +31,7 @@ spec:
             - name: DEFAULT_DOMAIN
               value: {{required "Short Domain Host required" .Values.env.DEFAULT_DOMAIN | quote }}
             - name: IS_HTTPS_ENABLED
-              value: {{default false .Values.env.IS_HTTPS_ENABLED  }}
+              value: {{default "false" .Values.env.IS_HTTPS_ENABLED | quote }}
             - name:  DB_DRIVER
               value: "maria"
             - name:  DB_HOST
