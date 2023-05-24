@@ -25,11 +25,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: RUN_CI
-              value: "test"
             - name: DEFAULT_DOMAIN
               value: {{required "Short Domain Host required" .Values.env.DEFAULT_DOMAIN | quote }}
             - name: IS_HTTPS_ENABLED
