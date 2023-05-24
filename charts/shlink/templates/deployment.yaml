@@ -28,6 +28,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: RUN_CI
+              value: "test"
             - name: DEFAULT_DOMAIN
               value: {{required "Short Domain Host required" .Values.env.DEFAULT_DOMAIN | quote }}
             - name: IS_HTTPS_ENABLED
