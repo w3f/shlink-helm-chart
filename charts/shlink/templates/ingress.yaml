@@ -14,10 +14,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - {{ .Values.env.SHORT_DOMAIN_HOST }}
-      secretName: {{ .Values.env.SHORT_DOMAIN_HOST }}-secret
+        - {{ .Values.env.DEFAULT_DOMAIN }}
+      secretName: {{ .Values.env.DEFAULT_DOMAIN }}-secret
   rules:
-    - host: {{ .Values.env.SHORT_DOMAIN_HOST }}
+    - host: {{ .Values.env.DEFAULT_DOMAIN }}
       http:
         paths:
           - path: /

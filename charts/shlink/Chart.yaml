@@ -3,8 +3,8 @@ name: shlink
 description: A Helm chart for Kubernetes
 icon: https://shlink.io/favicon.svg
 type: application
-version: v1.0.0
-appVersion: 2.10.3
+version: v1.0.1
+appVersion: 3.6.0
 dependencies:
   - name: mariadb
     version: "10.4.0"
