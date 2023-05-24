@@ -9,5 +9,3 @@ repositories:
 releases:
 - name: shlink
   chart: ../charts/shlink
-  values:
-  - ./config/shlink-values.yaml.gotmpl  

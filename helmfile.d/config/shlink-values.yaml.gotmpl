@@ -1,4 +1,0 @@
-{{ if eq .Environment.Name "ci" }}
-image:
-  tag: {{ env "CIRCLE_SHA1" | default "kind" }}
-{{ end }}
