@@ -1,5 +1,4 @@
 environments:
-  production:
   ci:
 
 # This is needed for the mariadb dependency!
