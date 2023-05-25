@@ -16,9 +16,6 @@ teardown() {
 }
 
 main(){
-    if [ -z "$KEEP_W3F_MATRIX" ]; then
-        trap teardown EXIT
-    fi
 
     source /scripts/build-helmfile.sh
 
