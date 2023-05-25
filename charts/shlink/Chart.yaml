@@ -8,4 +8,4 @@ appVersion: 3.6.0
 dependencies:
   - name: mariadb
     version: "12.2.4"
-    repository: "file://charts/mariadb-10.4.0.tgz"
+    repository: "https://charts.bitnami.com/bitnami"

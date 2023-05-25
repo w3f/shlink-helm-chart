@@ -25,12 +25,13 @@ env:
 
 mariadb:
   architecture: standalone
-  fullnameOverride: shlink-mariadb
   auth:
     database: shlink
     username: shlink
     password: password
     rootPassword: root_password
+
+fullnameOverride: shlink-mariadb
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
