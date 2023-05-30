@@ -28,10 +28,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: SHORT_DOMAIN_HOST
-              value: {{required "Short Domain Host required" .Values.env.SHORT_DOMAIN_HOST | quote }}
-            - name: SHORT_DOMAIN_SCHEMA
-              value: {{default "http" .Values.env.SHORT_DOMAIN_SCHEMA | quote }}
+            - name: DEFAULT_DOMAIN
+              value: {{required "Short Domain Host required" .Values.env.DEFAULT_DOMAIN | quote }}
+            - name: IS_HTTPS_ENABLED
+              value: {{default "false" .Values.env.IS_HTTPS_ENABLED | quote }}
             - name:  DB_DRIVER
               value: "maria"
             - name:  DB_HOST
@@ -43,13 +43,13 @@ spec:
                 secretKeyRef:
                   name: shlink-mariadb
                   key: mariadb-password
-            {{- if .Values.env.INVALID_SHORT_URL_REDIRECT_TO }}
-            - name: INVALID_SHORT_URL_REDIRECT_TO
-              value: {{ .Values.env.INVALID_SHORT_URL_REDIRECT_TO }}
+            {{- if .Values.env.DEFAULT_INVALID_SHORT_URL_REDIRECT }}
+            - name: DEFAULT_INVALID_SHORT_URL_REDIRECT
+              value: {{ .Values.env.DEFAULT_INVALID_SHORT_URL_REDIRECT }}
             {{- end }}
-            {{- if .Values.env.BASE_URL_REDIRECT_TO }}
-            - name: BASE_URL_REDIRECT_TO
-              value: {{ .Values.env.BASE_URL_REDIRECT_TO }}
+            {{- if .Values.env.DEFAULT_BASE_URL_REDIRECT }}
+            - name: DEFAULT_BASE_URL_REDIRECT
+              value: {{ .Values.env.DEFAULT_BASE_URL_REDIRECT }}
             {{- end }}
             - name: ANONYMIZE_REMOTE_ADDR
               value: {{ .Values.env.ANONYMIZE_REMOTE_ADDR | quote }}

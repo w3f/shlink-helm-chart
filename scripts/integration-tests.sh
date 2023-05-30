@@ -16,7 +16,6 @@ teardown() {
 }
 
 main(){
-
     source /scripts/build-helmfile.sh
 
     run_tests
